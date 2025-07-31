@@ -1,0 +1,98 @@
+package codealpha;
+import java.util.*;
+
+class Student {
+    String name;
+    double grade;
+
+    public Student(String name, double grade) {
+        this.name = name;
+        this.grade = grade;
+    }
+}
+
+public class StudentGradeManager {
+    static ArrayList<Student> students = new ArrayList<>();
+
+    public static void inputStudents(Scanner sc) {
+        System.out.print("Enter number of students: ");
+        int n = sc.nextInt();
+        sc.nextLine();  // Consume leftover newline
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter student name: ");
+            String name = sc.nextLine();
+
+            double grade = -1;
+            while (grade < 0 || grade > 100) {
+                System.out.print("Enter grade (0 - 100): ");
+                grade = sc.nextDouble();
+                sc.nextLine();  // Consume newline
+                if (grade < 0 || grade > 100) {
+                    System.out.println("Invalid grade. Try again.");
+                }
+            }
+
+            students.add(new Student(name, grade));
+        }
+       }
+
+       public static void displaySummary() {
+           if (students.isEmpty()) {
+               System.out.println("No student data available.");
+               return;
+           }
+
+           double sum = 0;
+           double highest = Double.MIN_VALUE;
+           double lowest = Double.MAX_VALUE;
+           String topStudent = "", lowStudent = "";
+
+           System.out.println("\n--- Student Grades ---");
+           for (Student s : students) {
+               System.out.println(s.name + ": " + s.grade);
+               sum += s.grade;
+
+               if (s.grade > highest) {
+                   highest = s.grade;
+                   topStudent = s.name;
+               }
+
+               if (s.grade < lowest) {
+                   lowest = s.grade;
+                   lowStudent = s.name;
+               }
+           }
+           double average = sum / students.size();
+           System.out.println("\n--- Summary Report ---");
+           System.out.printf("Average Grade: %.2f\n", average);
+           System.out.println("Highest Grade: " + highest + " (" + topStudent + ")");
+           System.out.println("Lowest Grade: " + lowest + " (" + lowStudent + ")");
+       }
+
+       public static void main(String[] args) {
+           Scanner sc = new Scanner(System.in);
+
+           while (true) {
+               System.out.println("\n1. Input Student Grades");
+               System.out.println("2. Display Summary Report");
+               System.out.println("3. Exit");
+               System.out.print("Choose an option: ");
+               int choice = sc.nextInt();
+               sc.nextLine(); // Clear newline
+
+               switch (choice) {
+                   case 1:
+                       inputStudents(sc);
+                       break;
+                   case 2:
+                       displaySummary();
+                       break;
+                   case 3:
+                       System.out.println("Exiting program. Goodbye!");
+                       return;
+                   default:
+                       System.out.println("Invalid choice.");
+               }
+           }
+       }
+}
